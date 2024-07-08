@@ -75,7 +75,7 @@ export default function AddProductForm({ userId }: AddProductFormProps) {
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
-          className="space-y-8 w-2/4"
+          className="space-y-8 w-full md:w-3/4"
         >
           <FormField
             control={form.control}
