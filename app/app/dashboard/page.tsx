@@ -4,10 +4,12 @@ import Image from "next/image";
 import { redirect } from "next/navigation";
 
 export default async function DashboardPage() {
+  const { user } = await getUser({ ensureSignedIn: true });
+
   return (
     <>
       <div className="flex items-center">
-        <h1 className="text-lg font-semibold md:text-2xl">Inventory</h1>
+        <h1 className="text-lg font-semibold md:text-2xl">Dashboard</h1>
       </div>
       <div
         className="flex flex-1 items-center justify-center rounded-lg border border-dashed shadow-sm"
