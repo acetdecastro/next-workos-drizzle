@@ -64,6 +64,7 @@ import {
   SelectValue,
   SelectTrigger,
 } from "../ui/select";
+import { useToast } from "@/components/ui/use-toast";
 
 export type Product = {
   id: number;
@@ -71,7 +72,7 @@ export type Product = {
   description: string;
 };
 
-export const columns: ColumnDef<Product>[] = [
+export const columns: (toast: any) => ColumnDef<Product>[] = (toast) => [
   // {
   //   id: "select",
   //   header: ({ table }) => (
@@ -150,7 +151,6 @@ export const columns: ColumnDef<Product>[] = [
     enableHiding: false,
     cell: ({ row }) => {
       const product = row.original;
-
       return (
         <Dialog>
           <DropdownMenu>
@@ -186,7 +186,26 @@ export const columns: ColumnDef<Product>[] = [
                 <Button variant="outline">Cancel</Button>
               </DialogClose>
               <DialogClose asChild>
-                <Button onClick={async () => await deleteProduct(product.id)}>
+                <Button
+                  onClick={async () => {
+                    try {
+                      await deleteProduct(product.id);
+                      toast({
+                        title: "Product Deleted",
+                        description:
+                          "The product has been successfully deleted.",
+                        variant: "success",
+                      });
+                    } catch (error: any) {
+                      toast({
+                        title: "Error",
+                        description:
+                          "An error occured while deleting the product.",
+                        variant: "destructive",
+                      });
+                    }
+                  }}
+                >
                   Delete
                 </Button>
               </DialogClose>
@@ -203,6 +222,8 @@ interface ProductDataTableProps {
 }
 
 export function ProductDataTable({ products }: ProductDataTableProps) {
+  const { toast } = useToast();
+
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
@@ -213,7 +234,7 @@ export function ProductDataTable({ products }: ProductDataTableProps) {
 
   const table = useReactTable({
     data: products || [],
-    columns,
+    columns: columns(toast),
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
     getCoreRowModel: getCoreRowModel(),
@@ -232,12 +253,7 @@ export function ProductDataTable({ products }: ProductDataTableProps) {
 
   return (
     <div className="w-full">
-      <div className="flex justify-end">
-        <Link href={"/app/products/add"}>
-          <Button size={"sm"}>Add Product</Button>
-        </Link>
-      </div>
-      <div className="flex items-center py-4">
+      <div className="flex justify-between items-center pb-4">
         <Input
           placeholder="Filter names..."
           value={(table.getColumn("name")?.getFilterValue() as string) ?? ""}
@@ -272,6 +288,11 @@ export function ProductDataTable({ products }: ProductDataTableProps) {
               })}
           </DropdownMenuContent>
         </DropdownMenu> */}
+        {/* <div className="flex justify-end"> */}
+        <Link href={"/app/products/add"}>
+          <Button size={"sm"}>Add Product</Button>
+        </Link>
+        {/* </div> */}
       </div>
       <div className="rounded-md border">
         <Table>
@@ -325,7 +346,7 @@ export function ProductDataTable({ products }: ProductDataTableProps) {
       </div>
 
       {/* footer */}
-      <div className="flex flex-col items-end justify-end space-x-2 space-y-3 py-4">
+      <div className="flex flex-col md:flex-row items-end justify-end space-x-2 space-y-3 py-4">
         {/* <div className="flex-1 text-sm text-muted-foreground">
           {table.getFilteredSelectedRowModel().rows.length} of{" "}
           {table.getFilteredRowModel().rows.length} row(s) selected.

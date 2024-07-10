@@ -8,7 +8,7 @@ export default async function DashboardPage() {
 
   return (
     <>
-      <div className="flex items-center">
+      {/* <div className="flex items-center">
         <h1 className="text-lg font-semibold md:text-2xl">Dashboard</h1>
       </div>
       <div
@@ -24,7 +24,7 @@ export default async function DashboardPage() {
           </p>
           <Button className="mt-4">Add Product</Button>
         </div>
-      </div>
+      </div> */}
     </>
   );
 }

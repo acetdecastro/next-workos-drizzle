@@ -4,18 +4,12 @@ import "../styles/globals.css";
 import { ThemeProvider } from "@/components/hoc/theme-provider";
 import { cn } from "@/lib/utils";
 import { Inter as FontSans } from "next/font/google";
-import { cssTransition, ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+import { Toaster } from "@/components/ui/toaster";
 
 const fontSans = FontSans({
   subsets: ["latin"],
   variable: "--font-sans",
 });
-
-// const bounce = cssTransition({
-//   enter: "animate__animated animate__bounceIn",
-//   exit: "animate__animated animate__bounceOut",
-// });
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -43,20 +37,8 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           {children}
+          <Toaster />
         </ThemeProvider>
-        <ToastContainer
-          position="bottom-right"
-          autoClose={5000}
-          hideProgressBar
-          newestOnTop={false}
-          closeOnClick
-          rtl={false}
-          pauseOnFocusLoss
-          draggable
-          pauseOnHover
-          limit={2}
-          className="text-sm"
-        />
       </body>
     </html>
   );

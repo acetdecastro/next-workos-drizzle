@@ -19,8 +19,8 @@ import { z } from "zod";
 import { cn } from "@/lib/utils";
 import { Textarea } from "../ui/textarea";
 import { useState } from "react";
-import { toast } from "react-toastify";
 import { AlertDestructive } from "../alerts/alert-destructive";
+import { LoadingSpinner } from "../ui/loading-spinner";
 
 const formSchema = z.object({
   name: z
@@ -61,12 +61,9 @@ export default function AddProductForm({ userId }: AddProductFormProps) {
         userId,
       });
       setIsLoading(false);
-      // toast.success("Successfully added the product.");
     } catch (error: any) {
-      console.log(error);
-      setHasErrorAfterSubmit(true);
       setIsLoading(false);
-      // toast.error("An error occurred while adding the product.");
+      setHasErrorAfterSubmit(true);
     }
   }
 
@@ -75,21 +72,23 @@ export default function AddProductForm({ userId }: AddProductFormProps) {
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
-          className="space-y-8 w-full md:w-3/4"
+          className="space-y-8 w-full md:w-96"
         >
           <FormField
             control={form.control}
             name="name"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className={cn(errors.name && "text-red-700")}>
+                <FormLabel className={cn(errors.name && "text-destructive")}>
                   Name
                 </FormLabel>
                 <FormControl>
                   <Input className="w-full" placeholder="" {...field} />
                 </FormControl>
                 <FormDescription>Product name.</FormDescription>
-                <FormMessage className={cn(errors.name && "text-red-700")} />
+                <FormMessage
+                  className={cn(errors.name && "text-destructive")}
+                />
               </FormItem>
             )}
           />
@@ -99,7 +98,9 @@ export default function AddProductForm({ userId }: AddProductFormProps) {
             name="description"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className={cn(errors.description && "text-red-700")}>
+                <FormLabel
+                  className={cn(errors.description && "text-destructive")}
+                >
                   Description
                 </FormLabel>
                 <FormControl>
@@ -107,7 +108,7 @@ export default function AddProductForm({ userId }: AddProductFormProps) {
                 </FormControl>
                 <FormDescription>Product description.</FormDescription>
                 <FormMessage
-                  className={cn(errors.description && "text-red-700")}
+                  className={cn(errors.description && "text-destructive")}
                 />
               </FormItem>
             )}
@@ -117,8 +118,12 @@ export default function AddProductForm({ userId }: AddProductFormProps) {
             <AlertDestructive message="An error occurred while adding the product." />
           )}
 
-          <Button type="submit" disabled={isLoading}>
-            {isLoading ? "Submitting..." : "Submit"}
+          <Button size="sm" type="submit" disabled={isLoading}>
+            {isLoading ? (
+              <LoadingSpinner className="h-6 w-9 text-primary-foreground/70" />
+            ) : (
+              "Submit"
+            )}
           </Button>
         </form>
       </Form>

@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button";
 import { getUser } from "@workos-inc/authkit-nextjs";
 import { redirect } from "next/navigation";
 import { ProductDataTable } from "@/components/tables/product-data-table";
+import { Skeleton } from "@/components/ui/skeleton";
 
 interface ProductsDetailsPageProps {
   params: {
@@ -28,5 +29,5 @@ export default async function ProductsDetailsPage({
     return <>No product with id {id}</>;
   }
 
-  return <>{res.data.name}</>;
+  return <>{res.data.name} </>;
 }

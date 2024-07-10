@@ -19,9 +19,10 @@ import { z } from "zod";
 import { cn } from "@/lib/utils";
 import { Textarea } from "../ui/textarea";
 import { useState } from "react";
-import { toast } from "react-toastify";
 import { AlertDestructive } from "../alerts/alert-destructive";
 import { SelectProduct } from "@/db/schema";
+import { LoadingSpinner } from "../ui/loading-spinner";
+import { useToast } from "../ui/use-toast";
 
 const formSchema = z.object({
   name: z
@@ -45,6 +46,7 @@ export default function EditProductForm({
   userId,
   product,
 }: EditProductFormProps) {
+  const { toast } = useToast();
   const [isLoading, setIsLoading] = useState(false);
   const [hasErrorAfterSubmit, setHasErrorAfterSubmit] = useState(false);
   const form = useForm<z.infer<typeof formSchema>>({
@@ -63,12 +65,20 @@ export default function EditProductForm({
     try {
       await updateProduct(product.id, values);
       setIsLoading(false);
-      toast.success("Successfully updated the product.");
+      toast({
+        title: "Product Updated",
+        description: "The product has been successfully updated.",
+        variant: "success",
+      });
     } catch (error: any) {
       console.log(error);
-      setHasErrorAfterSubmit(true);
       setIsLoading(false);
-      // toast.error("An error occurred while adding the product.");
+      setHasErrorAfterSubmit(true);
+      // toast({
+      //   title: "Error",
+      //   description: "An error occurred while updating the product.",
+      //   variant: "destructive",
+      // });
     }
   }
 
@@ -77,21 +87,23 @@ export default function EditProductForm({
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
-          className="space-y-8 w-full md:w-3/4"
+          className="space-y-8 w-full md:w-96"
         >
           <FormField
             control={form.control}
             name="name"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className={cn(errors.name && "text-red-700")}>
+                <FormLabel className={cn(errors.name && "text-destructive")}>
                   Name
                 </FormLabel>
                 <FormControl>
                   <Input className="w-full" placeholder="" {...field} />
                 </FormControl>
                 <FormDescription>Product name.</FormDescription>
-                <FormMessage className={cn(errors.name && "text-red-700")} />
+                <FormMessage
+                  className={cn(errors.name && "text-destructive")}
+                />
               </FormItem>
             )}
           />
@@ -101,7 +113,9 @@ export default function EditProductForm({
             name="description"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className={cn(errors.description && "text-red-700")}>
+                <FormLabel
+                  className={cn(errors.description && "text-destructive")}
+                >
                   Description
                 </FormLabel>
                 <FormControl>
@@ -109,7 +123,7 @@ export default function EditProductForm({
                 </FormControl>
                 <FormDescription>Product description.</FormDescription>
                 <FormMessage
-                  className={cn(errors.description && "text-red-700")}
+                  className={cn(errors.description && "text-destructive")}
                 />
               </FormItem>
             )}
@@ -119,8 +133,12 @@ export default function EditProductForm({
             <AlertDestructive message="An error occurred while updating the product." />
           )}
 
-          <Button type="submit" disabled={isLoading}>
-            {isLoading ? "Submitting..." : "Submit"}
+          <Button size="sm" type="submit" disabled={isLoading}>
+            {isLoading ? (
+              <LoadingSpinner className="h-6 w-9 text-primary-foreground/70" />
+            ) : (
+              "Submit"
+            )}
           </Button>
         </form>
       </Form>

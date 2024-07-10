@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/breadcrumb";
 import { usePathname } from "next/navigation";
 
-export function ProductsBreadcrumb() {
+export function DashboardBreadcrumb() {
   const pathname = usePathname();
 
   const getBreadcrumbItems = () => {
@@ -35,14 +35,14 @@ export function ProductsBreadcrumb() {
       return (
         <>
           <BreadcrumbItem>
-            <BreadcrumbLink href="/app/products" className="font-medium">
-              Products
+            <BreadcrumbLink href="/app/dashboard" className="font-medium">
+              Dashboard
             </BreadcrumbLink>
           </BreadcrumbItem>
-          <BreadcrumbSeparator />
+          {/* <BreadcrumbSeparator />
           <BreadcrumbItem>
-            <BreadcrumbPage className="font-medium">{action}</BreadcrumbPage>
-          </BreadcrumbItem>
+            <BreadcrumbPage>{action}</BreadcrumbPage>
+          </BreadcrumbItem> */}
         </>
       );
     }
@@ -50,10 +50,10 @@ export function ProductsBreadcrumb() {
     return (
       <BreadcrumbItem>
         <BreadcrumbLink
-          href="/app/products"
+          href="/app/dashboard"
           className="text-primary font-medium"
         >
-          Products
+          Dashboard
         </BreadcrumbLink>
       </BreadcrumbItem>
     );
@@ -66,13 +66,13 @@ export function ProductsBreadcrumb() {
   );
 }
 
-export default function ProductsLayout({
+export default function DashboardLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <>
       <div className="flex items-center">
-        <ProductsBreadcrumb />
+        <DashboardBreadcrumb />
       </div>
       <div
         className="p-4 flex flex-1 rounded-lg border border-dashed shadow-sm"

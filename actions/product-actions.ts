@@ -17,10 +17,8 @@ export const getProducts = async () => {
       data,
     };
   } catch (error: any) {
-    return {
-      status: 400,
-      message: "Failed to fetch",
-    };
+    console.log(error);
+    throw new Error(error);
   }
 };
 
@@ -36,6 +34,7 @@ export const getProductById = async (id: number) => {
       data: product,
     };
   } catch (error: any) {
+    console.log(error);
     throw new Error(error);
   }
 };
@@ -49,11 +48,13 @@ export const addProduct = async (addProductDto: InsertProduct) => {
       .returning({ insertedId: products.id });
     id = newProduct.insertedId;
   } catch (error: any) {
+    console.log(error);
     throw new Error(error);
   }
 
   revalidatePath("/app/products");
   redirect(`/app/products/view/${id}`);
+  // throw new Error("error");
 };
 
 export const updateProduct = async (
@@ -63,18 +64,22 @@ export const updateProduct = async (
   try {
     await db.update(products).set(editProductDto).where(eq(products.id, id));
   } catch (error: any) {
+    console.log(error);
     throw new Error(error);
   }
 
   revalidatePath(`/app/products/edit/${id}`);
+  // throw new Error("test");
 };
 
 export const deleteProduct = async (id: number) => {
   try {
     await db.delete(products).where(eq(products.id, id));
   } catch (error: any) {
+    console.log(error);
     throw new Error(error);
   }
 
   revalidatePath(`/app/products`);
+  // throw new Error("error");
 };

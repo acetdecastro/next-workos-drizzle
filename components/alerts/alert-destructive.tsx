@@ -1,18 +1,20 @@
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { ExclamationTriangleIcon } from "@radix-ui/react-icons";
-
+import { CircleAlert } from "lucide-react";
 interface AlertDestructiveProps {
-  message: string;
+  message?: string;
 }
 
 export function AlertDestructive({
   message = "Sorry, something went wrong.",
 }: AlertDestructiveProps) {
   return (
-    <Alert variant="default" className="text-red-700 border-red-700">
-      <ExclamationTriangleIcon className="h-4 w-4" color="#b91c1c" />
-      <AlertTitle>Error</AlertTitle>
-      <AlertDescription>{message}</AlertDescription>
+    <Alert variant="destructive" className="flex-col space-x-2 w-full">
+      <CircleAlert className="h-[1.4rem] w-[1.4rem]" />
+      <div className="pt-[11px]">
+        <AlertTitle>Error</AlertTitle>
+        <AlertDescription>{message}</AlertDescription>
+      </div>
     </Alert>
   );
 }
